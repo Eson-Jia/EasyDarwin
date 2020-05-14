@@ -199,11 +199,16 @@ func (session *Session) Start() {
 			logger.Println(session, err)
 			return
 		}
-		if buf1[0] == 0x24 { //rtp data
+		// RTSP interleaved Frame,第1个字节是`$`符号
+		//rtp data
+		if buf1[0] == 0x24 {
+
+			//RTSP interleaved Frame 第2个字节是 通道标记
 			if _, err := io.ReadFull(session.connRW, buf1); err != nil {
 				logger.Println(err)
 				return
 			}
+			//RTSP interleaved Frame 第3-4个字节是 rtp 包的大小，注意是网络字节序
 			if _, err := io.ReadFull(session.connRW, buf2); err != nil {
 				logger.Println(err)
 				return
@@ -272,8 +277,10 @@ func (session *Session) Start() {
 					if !isPrefix {
 						reqBuf.WriteString("\r\n")
 					}
+					// 一行一行读直到读到一个空行说明请求内容结束了
 					if len(line) == 0 {
 						req := NewRequest(reqBuf.String())
+						// 如果请求不符合 RTSP 的规范话就返回 nil
 						if req == nil {
 							break
 						}
