@@ -4,6 +4,10 @@
 
 ### 推流模式下
 
+Server: 192.168.1.22 EasyDarwin
+Client: ffmpeg
+Action: ffmpeg 取流推给 darwin
+
 ```rtsp
 OPTIONS rtsp://192.168.1.22:10554/test RTSP/1.0
 CSeq: 1
@@ -82,6 +86,10 @@ Session: ImAuCKRMg
 ```
 
 ### 拉流模式下
+
+Server: 192.168.10.147 监控相机
+Client: ffplay
+Action: 播放相机流
 
 ```rtsp
 OPTIONS rtsp://192.168.10.147:554 RTSP/1.0
@@ -188,4 +196,97 @@ RTSP/1.0 200 OK
 CSeq: 7
 Session:        708732579
 Date:  Thu, May 14 2020 16:45:36 GMT
+```
+
+### 拉 Darwin 流
+
+Server: EasyDarwin
+Client: ffplay
+Action: 播放 darwin 上的流
+
+```tcp
+OPTIONS rtsp://192.168.1.22:10554/test RTSP/1.0
+CSeq: 2
+User-Agent: LibVLC/3.0.8 (LIVE555 Streaming Media v2016.11.28)
+
+RTSP/1.0 200 OK
+CSeq: 2
+Session: EFKONhgMR
+Public: DESCRIBE, SETUP, TEARDOWN, PLAY, PAUSE, OPTIONS, ANNOUNCE, RECORD
+
+DESCRIBE rtsp://192.168.1.22:10554/test RTSP/1.0
+CSeq: 3
+User-Agent: LibVLC/3.0.8 (LIVE555 Streaming Media v2016.11.28)
+Accept: application/sdp
+
+RTSP/1.0 200 OK
+CSeq: 3
+Session: EFKONhgMR
+Content-Length: 830
+
+v=0
+o=- 1589550732352122 1589550732352122 IN IP4 192.168.10.147
+s=Media Presentation
+e=NONE
+b=AS:5100
+t=0 0
+a=control:rtsp://192.168.10.147/
+m=video 0 RTP/AVP 96
+c=IN IP4 0.0.0.0
+b=AS:5000
+a=recvonly
+a=x-dimensions:1920,1080
+a=control:rtsp://192.168.10.147/trackID=1
+a=rtpmap:96 H264/90000
+a=fmtp:96 profile-level-id=420029; packetization-mode=1; sprop-parameter-sets=Z0IAKp2oHgCJ+WbgICAoAAADAAgAAAMBlCA=,aM48gA==
+m=audio 0 RTP/AVP 104
+c=IN IP4 0.0.0.0
+b=AS:50
+a=recvonly
+a=control:rtsp://192.168.10.147/trackID=2
+a=rtpmap:104 mpeg4-generic/16000/1
+a=fmtp:104 profile-level-id=15; streamtype=5; mode=AAC-hbr; config=1408;SizeLength=13; IndexLength=3; IndexDeltaLength=3; Profile=1;
+a=Media_header:MEDIAINFO=494D4B48010200000400000101200110803E0000803E000000000000000000000000000000000000;
+a=appversion:1.0
+
+SETUP rtsp://192.168.10.147/trackID=1 RTSP/1.0
+CSeq: 4
+User-Agent: LibVLC/3.0.8 (LIVE555 Streaming Media v2016.11.28)
+Transport: RTP/AVP;unicast;client_port=57214-57215
+
+RTSP/1.0 200 OK
+CSeq: 4
+Session: EFKONhgMR
+Transport: RTP/AVP;unicast;client_port=57214-57215
+
+SETUP rtsp://192.168.10.147/trackID=2 RTSP/1.0
+CSeq: 5
+User-Agent: LibVLC/3.0.8 (LIVE555 Streaming Media v2016.11.28)
+Transport: RTP/AVP;unicast;client_port=57216-57217
+Session: EFKONhgMR
+
+RTSP/1.0 200 OK
+Session: EFKONhgMR
+Transport: RTP/AVP;unicast;client_port=57216-57217
+CSeq: 5
+
+PLAY rtsp://192.168.10.147/ RTSP/1.0
+CSeq: 6
+User-Agent: LibVLC/3.0.8 (LIVE555 Streaming Media v2016.11.28)
+Session: EFKONhgMR
+Range: npt=0.000-
+
+RTSP/1.0 200 OK
+Range: npt=0.000-
+CSeq: 6
+Session: EFKONhgMR
+
+TEARDOWN rtsp://192.168.10.147/ RTSP/1.0
+CSeq: 7
+User-Agent: LibVLC/3.0.8 (LIVE555 Streaming Media v2016.11.28)
+Session: EFKONhgMR
+
+RTSP/1.0 200 OK
+CSeq: 7
+Session: EFKONhgMR
 ```
