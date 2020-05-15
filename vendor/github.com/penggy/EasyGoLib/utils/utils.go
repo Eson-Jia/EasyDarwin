@@ -88,7 +88,7 @@ func ErrorLogFilename() string {
 
 func DataDir() string {
 	dir := CWD()
-	_dir := Conf().Section("").Key("data_dir").Value()
+	_dir := Conf().Section("http").Key("data_dir").Value()
 	if _dir != "" {
 		dir = _dir
 	}
