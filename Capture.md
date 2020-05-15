@@ -198,9 +198,9 @@ Session:        708732579
 Date:  Thu, May 14 2020 16:45:36 GMT
 ```
 
-### 拉 Darwin 流
+### 拉 Darwin in Golang 流
 
-Server: EasyDarwin
+Server: EasyDarwin in Golang
 Client: ffplay
 Action: 播放 darwin 上的流
 
@@ -289,4 +289,113 @@ Session: EFKONhgMR
 RTSP/1.0 200 OK
 CSeq: 7
 Session: EFKONhgMR
+```
+
+### 拉 Darwin in C++ 流
+
+Server: EasyDarwin in C++
+Client: ffplay
+Action: 播放 darwin 上的流
+
+```tcp
+OPTIONS rtsp://192.168.1.74:10554/18?channel=1 RTSP/1.0
+CSeq: 1
+User-Agent: Lavf57.83.100
+
+RTSP/1.0 200 OK
+Server: VDMSDarwin/2.0 (Build/4.0; Platform/Linux; Release/EasyDarwin; State/Development; )
+Cseq: 1
+Public: DESCRIBE, SETUP, TEARDOWN, PLAY, PAUSE, OPTIONS, ANNOUNCE, GET_PARAMETER, RECORD
+
+DESCRIBE rtsp://192.168.1.74:10554/18?channel=1 RTSP/1.0
+Accept: application/sdp
+CSeq: 2
+User-Agent: Lavf57.83.100
+
+RTSP/1.0 200 OK
+Server: VDMSDarwin/2.0 (Build/4.0; Platform/Linux; Release/EasyDarwin; State/Development; )
+Cseq: 2
+Cache-Control: no-cache
+Content-length: 503
+Date: Fri, 15 May 2020 07:09:47 GMT
+Expires: Fri, 15 May 2020 07:09:47 GMT
+Content-Type: application/sdp
+x-Accept-Retransmit: our-retransmit
+x-Accept-Dynamic-Rate: 1
+Content-Base: rtsp://192.168.1.74:10554/18?channel=1/
+
+v=0
+o=- 0 0 IN IP4 127.0.0.1
+s=No Name
+c=IN IP4 0.0.0.0
+t=0 0
+a=tool:libavformat 58.18.100
+a=control:*
+m=video 0 RTP/AVP 96
+b=AS:200
+a=rtpmap:96 H264/90000
+a=fmtp:96 packetization-mode=1; sprop-parameter-sets=Z00AKZpkA8ARPyzUBAQFAAADA+gAAMNQBA==,aO48gA==; profile-level-id=4D0029
+a=control:trackID=0
+m=audio 0 RTP/AVP 97
+b=AS:128
+a=rtpmap:97 MPEG4-GENERIC/16000/1
+a=fmtp:97 profile-level-id=1;mode=AAC-hbr;sizelength=13;indexlength=3;indexdeltalength=3; config=1408
+a=control:trackID=1
+SETUP rtsp://192.168.1.74:10554/18?channel=1/trackID=0 RTSP/1.0
+Transport: RTP/AVP/UDP;unicast;client_port=24816-24817
+x-Dynamic-Rate: 0
+CSeq: 3
+User-Agent: Lavf57.83.100
+
+RTSP/1.0 200 OK
+Server: VDMSDarwin/2.0 (Build/4.0; Platform/Linux; Release/EasyDarwin; State/Development; )
+Cseq: 3
+Cache-Control: no-cache
+Session: 364160928834678926
+Date: Fri, 15 May 2020 07:09:47 GMT
+Expires: Fri, 15 May 2020 07:09:47 GMT
+Transport: RTP/AVP/UDP;unicast;source=172.17.0.11;client_port=24816-24817;server_port=6970-6971
+x-Dynamic-Rate: 0
+
+SETUP rtsp://192.168.1.74:10554/18?channel=1/trackID=1 RTSP/1.0
+Transport: RTP/AVP/UDP;unicast;client_port=24818-24819
+x-Dynamic-Rate: 0
+CSeq: 4
+User-Agent: Lavf57.83.100
+Session: 364160928834678926
+
+RTSP/1.0 200 OK
+Server: VDMSDarwin/2.0 (Build/4.0; Platform/Linux; Release/EasyDarwin; State/Development; )
+Cseq: 4
+Session: 364160928834678926
+Cache-Control: no-cache
+Date: Fri, 15 May 2020 07:09:47 GMT
+Expires: Fri, 15 May 2020 07:09:47 GMT
+Transport: RTP/AVP/UDP;unicast;source=172.17.0.11;client_port=24818-24819;server_port=6970-6971
+x-Dynamic-Rate: 0
+
+PLAY rtsp://192.168.1.74:10554/18?channel=1/ RTSP/1.0
+Range: npt=0.000-
+CSeq: 5
+User-Agent: Lavf57.83.100
+Session: 364160928834678926
+
+RTSP/1.0 200 OK
+Server: VDMSDarwin/2.0 (Build/4.0; Platform/Linux; Release/EasyDarwin; State/Development; )
+Cseq: 5
+Session: 364160928834678926
+Range: npt=now-
+RTP-Info: url=rtsp://192.168.1.74:10554/18?channel=1/18,url=rtsp://192.168.1.74:10554/18?channel=1/18
+
+TEARDOWN rtsp://192.168.1.74:10554/18?channel=1/ RTSP/1.0
+CSeq: 6
+User-Agent: Lavf57.83.100
+Session: 364160928834678926
+
+RTSP/1.0 200 OK
+Server: VDMSDarwin/2.0 (Build/4.0; Platform/Linux; Release/EasyDarwin; State/Development; )
+Cseq: 6
+Session: 364160928834678926
+Connection: Close
+
 ```
