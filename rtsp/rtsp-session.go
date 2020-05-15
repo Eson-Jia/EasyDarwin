@@ -620,6 +620,7 @@ func (session *Session) handleRequest(req *Request) {
 				}
 			}
 			logger.Printf("Parse SETUP req.TRANSPORT:UDP.Session.Type:%d,control:%s, AControl:%s,VControl:%s", session.Type, setupPath, aPath, vPath)
+			// setup audio uri
 			if setupPath == aPath || aPath != "" && strings.LastIndex(setupPath, aPath) == len(setupPath)-len(aPath) {
 				if session.Type == SESSEION_TYPE_PLAYER {
 					session.UDPClient.APort, _ = strconv.Atoi(udpMatchs[1])
@@ -648,6 +649,7 @@ func (session *Session) handleRequest(req *Request) {
 					tss = append(tss, tail...)
 					ts = strings.Join(tss, ";")
 				}
+				//setup video uri
 			} else if setupPath == vPath || vPath != "" && strings.LastIndex(setupPath, vPath) == len(setupPath)-len(vPath) {
 				if session.Type == SESSEION_TYPE_PLAYER {
 					session.UDPClient.VPort, _ = strconv.Atoi(udpMatchs[1])
