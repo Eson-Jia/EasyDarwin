@@ -376,6 +376,7 @@ func (pusher *Pusher) shouldSequenceStart(rtp *RTPInfo) bool {
 		NaluType := uint8(payloadHeader & 0x1F)
 		// log.Printf("RTP Type:%d", NaluType)
 		switch {
+		// single NAL Unit Packet
 		case NaluType <= 23:
 			realNALU = rtp.Payload[0]
 			// log.Printf("Single NAL:%d", NaluType)
