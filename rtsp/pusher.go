@@ -275,9 +275,14 @@ func (pusher *Pusher) Start() {
 
 		if pusher.gopCacheEnable && pack.Type == RTP_TYPE_VIDEO {
 			pusher.gopCacheLock.Lock()
+			// 这里判断是不是一个 GOP 序列的开始，shouldSequenceStart 判断是不是序列的开始
 			if rtp := ParseRTP(pack.Buffer.Bytes()); rtp != nil && pusher.shouldSequenceStart(rtp) {
+				//如果是 GOP 序列的开始就清空上一个序列的缓存
 				pusher.gopCache = make([]*RTPPack, 0)
 			}
+			//这里开始缓存 GOP 序列中的 rtp 包，新的 Player 添加之后，
+			//立即将这个 GOP 序列中的包添加到该 Player的队列中去,以便其立即播放
+			//详见 AddPlayer 方法
 			pusher.gopCache = append(pusher.gopCache, pack)
 			pusher.gopCacheLock.Unlock()
 		}
@@ -322,6 +327,7 @@ func (pusher *Pusher) AddPlayer(player *Player) *Pusher {
 	logger := pusher.Logger()
 	if pusher.gopCacheEnable {
 		pusher.gopCacheLock.RLock()
+		// 立即将缓存的 GOP 序列填充到 player 队列,这就是所谓的缓存 I 帧
 		for _, pack := range pusher.gopCache {
 			player.QueueRTP(pack)
 			pusher.AddOutputBytes(pack.Buffer.Len())
@@ -369,6 +375,7 @@ func (pusher *Pusher) ClearPlayer() {
 	}()
 }
 
+// shouldSequenceStart 根据 rtp payload 中的数据，即 h264/h265 数据，判断是不是 GOP 序列的开始
 func (pusher *Pusher) shouldSequenceStart(rtp *RTPInfo) bool {
 	if strings.EqualFold(pusher.VCodec(), "h264") {
 		var realNALU uint8
