@@ -45,6 +45,7 @@ type RTSPClient struct {
 	VControl             string
 	ACodec               string
 	VCodec               string
+	// 循环发送 OPTIONS 的时间间隔
 	OptionIntervalMillis int64
 	SDPRaw               string
 
@@ -369,6 +370,7 @@ func (client *RTSPClient) startStream() {
 			return
 		}
 		switch b {
+		// rtsp interleaved frame 的魔数是 0x24
 		case 0x24: // rtp
 			header := make([]byte, 4)
 			header[0] = b
